@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Issue_tracker_webapp.props" />
+</Project>
