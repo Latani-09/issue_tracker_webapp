@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace Issue_tracker_webapp.Entities
 {
     public class Project
     {
-        public int projectID { get; set; }
+        [Required]
+        public Guid projectID { get; set; }
         public string projectName { get; set; }
         public string projectDescription { get; set; }
         public ICollection<Issue> issues { get; set; }

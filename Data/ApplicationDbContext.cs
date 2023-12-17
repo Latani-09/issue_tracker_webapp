@@ -8,6 +8,10 @@ namespace Issue_tracker_webapp.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-        }
+            
+    }
+        public DbSet<Entities.Issue> issues { get; set; }
+        public DbSet<Entities.Project> projects { get; set; }
+            
     }
 }

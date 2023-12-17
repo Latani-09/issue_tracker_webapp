@@ -1,20 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 
 namespace Issue_tracker_webapp.Entities
 {
     public class Issue
     {
-        public int issueID;
-        public int projectID;
-        public string issueTitle;
-        public string issueDescription;
-        public DateTime createdAt;
-        public DateTime updatedAt;
-        public int assigneeID;
-        public int reporterID;
-        public string type;
-        public string priority;
-        public string status;
+        [Required]
+        public Guid issueID { get; set; }
+        public int projectID { get; set; }
+        public string issueTitle { get; set; }
+        public string issueDescription { get; set; }
+        public DateTime createdAt { get; set; }
+        public DateTime updatedAt { get; set; }
+        public int assigneeID { get; set; }
+        public int reporterID { get; set; }
+        public string type { get; set; }
+        public string priority { get; set; }
+        public string status { get; set; }
 
     }
 }
