@@ -1,0 +1,67 @@
+﻿  @using Issue_tracker_webapp.Models;
+  @model ProjectViewModel
+<br />
+issue_tracker_webapp.entities;
+
+<h1>Project List</h1>
+<br />
+<table class="table table-striped" id="projectTable">
+    <thead>
+        <tr>
+            <th>
+                Project title
+            </th>
+            <th>
+                Description
+            </th>
+            <th style="width:10%">
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var project in Model.projectList)
+        {
+            <tr>
+                <td>
+                    <div class="row">
+                        <div class="col-sm">
+                            <a>
+                                @project.projectName
+                            </a>
+                            <br>
+                            <small>
+                                @project.projectDescription
+                            </small>
+                            <br>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="project" asp-action="projectView" asp-route="@project.projectID">Go to project</a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+
+<div class="card">
+    <div id="viewAll" class="card-body table-responsive">
+        <form asp-controller="project" method="post" asp-action="addproject" class="d-inline">
+            <div>
+                <label>Project title</label>
+                <input asp-for="@Model.projectview.projectName" />
+            </div>
+            <div>
+                <label>Project Description</label>
+                <input asp-for="@Model.projectview.projectDescription" />
+            </div>
+            <div class="col-sm-12" style=" padding: 20px 20px 0px 0px">
+                <button type="submit" id="save" class="btn bg-primary">
+                    <i class="fa fa-check"></i>
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+

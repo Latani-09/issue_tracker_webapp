@@ -7,7 +7,7 @@ namespace Issue_tracker_webapp.Entities
     {
         [Required]
         public Guid issueID { get; set; }
-        public int projectID { get; set; }
+        public string projectID { get; set; }
         public string issueTitle { get; set; }
         public string issueDescription { get; set; }
         public DateTime createdAt { get; set; }

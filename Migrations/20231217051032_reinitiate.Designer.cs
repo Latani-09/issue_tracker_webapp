@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Issue_tracker_webapp.data
+namespace Issue_tracker_webapp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231216172407_permission")]
-    partial class permission
+    [Migration("20231217051032_reinitiate")]
+    partial class reinitiate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,11 +26,9 @@ namespace Issue_tracker_webapp.data
 
             modelBuilder.Entity("Issue_tracker_webapp.Entities.Issue", b =>
                 {
-                    b.Property<int>("issueID")
+                    b.Property<Guid>("issueID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("issueID"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("assigneeID")
                         .HasColumnType("int");
@@ -50,8 +48,12 @@ namespace Issue_tracker_webapp.data
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("projectID")
-                        .HasColumnType("int");
+                    b.Property<string>("projectID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("projectID1")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("reporterID")
                         .HasColumnType("int");
@@ -69,18 +71,16 @@ namespace Issue_tracker_webapp.data
 
                     b.HasKey("issueID");
 
-                    b.HasIndex("projectID");
+                    b.HasIndex("projectID1");
 
                     b.ToTable("issues");
                 });
 
             modelBuilder.Entity("Issue_tracker_webapp.Entities.Project", b =>
                 {
-                    b.Property<int>("projectID")
+                    b.Property<Guid>("projectID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("projectID"), 1L, 1);
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("projectDescription")
                         .IsRequired()
@@ -199,8 +199,8 @@ namespace Issue_tracker_webapp.data
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("projectID")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("projectID")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -306,9 +306,7 @@ namespace Issue_tracker_webapp.data
                 {
                     b.HasOne("Issue_tracker_webapp.Entities.Project", null)
                         .WithMany("issues")
-                        .HasForeignKey("projectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("projectID1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

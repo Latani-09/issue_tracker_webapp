@@ -16,7 +16,7 @@ namespace Issue_tracker_webapp.Controllers
         {
             _roleManager = roleManager;
         }
-        public async Task<ActionResult> Index(string roleId)
+        public async Task<ActionResult<PermissionViewModel>> Index(string roleId)
         {
             var model = new PermissionViewModel();
             var allPermissions = new List<RoleClaimsViewModel>();
@@ -35,7 +35,7 @@ namespace Issue_tracker_webapp.Controllers
                 }
             }
             model.RoleClaims = allPermissions;
-            return View(model);
+            return model;
         }
         public async Task<IActionResult> Update(PermissionViewModel model)
         {

@@ -20,11 +20,11 @@ namespace Issue_tracker_webapp.Controllers
             return View();
         }
 
-
-        public void AddIssue(int projectid, [FromBody] issueDTO issue)
+        [HttpPost]
+        public void AddIssue(string projectid, [FromBody] issueDTO issue)
         {
             var project = _dataContext.projects.SingleOrDefault(
-                   p => p.projectID == projectid);
+                   p => p.projectID.ToString() == projectid);
             if (project == null) { Console.WriteLine("project not found"); }
             else
             {
