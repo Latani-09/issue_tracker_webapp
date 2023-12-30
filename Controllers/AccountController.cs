@@ -13,11 +13,11 @@ namespace Issue_tracker_webapp.Controllers
 {
     public class AccountController : Controller
     {
-            private readonly ITokenService _tokenService;
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
-        public AccountController(UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager, ITokenService tokenService)
+        private readonly ITokenService _tokenService;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        public AccountController(UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager, ITokenService tokenService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -33,9 +33,9 @@ namespace Issue_tracker_webapp.Controllers
                 return BadRequest("username exist");
             }
 
-            var user = new AppUser()
+            var user = new IdentityUser()
             {
-                UserName = RegisterDTO.username.ToLower(),
+               UserName = RegisterDTO.username.ToLower(),
             };
             var result = await _userManager.CreateAsync(user, RegisterDTO.password);
 
@@ -113,7 +113,7 @@ namespace Issue_tracker_webapp.Controllers
 
         [Authorize(Roles = "Admin")]
         [HttpDelete("delete/{Id}")]
-        public async Task<ActionResult<UserDTO>> Delete(int Id)
+        public async Task<ActionResult<UserDTO>> Delete(string Id)
         {
             var user = await _userManager.Users.SingleOrDefaultAsync(x => x.Id == Id);
             if (user != null)

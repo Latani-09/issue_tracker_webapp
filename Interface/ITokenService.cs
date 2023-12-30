@@ -5,6 +5,6 @@ namespace Issue_tracker_webapp.Interface
 {
     public interface ITokenService
     {
-         Task<string> createToken(AppUser user);
+         Task<string> createToken(IdentityUser user);
     }
 }

@@ -24,20 +24,20 @@ issue_tracker_webapp.entities;
         {
             <tr>
                 <td>
-                    <div class="row">
-                        <div class="col-sm">
-                            <a>
-                                @project.projectName
-                            </a>
-                            <br>
                             <small>
-                                @project.projectDescription
+                                @project.projectName
                             </small>
-                            <br>
-                            <a class="nav-link text-dark" asp-area="" asp-controller="project" asp-action="projectView" asp-route="@project.projectID">Go to project</a>
-                        </div>
-                    </div>
+                            </td>
+                            <td>
+                            <a>
+                                @project.projectDescription
+                            </a>
                 </td>
+
+                <td>
+                            <a class="nav-link text-dark" asp-controller="project" asp-action="viewProject" asp-route-projectID="@project.projectID" >Go to project</a>
+                </td>
+
             </tr>
         }
     </tbody>

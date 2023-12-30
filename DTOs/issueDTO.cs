@@ -2,7 +2,8 @@
 {
     public class issueDTO
     {
-        public int projectID { get; set; }
+        public string projectID { get; set; }
+        public string assigneeID { get; set; }
         public string issueTitle { get; set; }
         public string issueDescription { get; set; }
     }

@@ -1,3 +1,86 @@
 ﻿@using Issue_tracker_webapp.Models;
 @model ProjectViewModel
-<h1>project view</h1>
+
+
+<h1>@Model.projectview.projectName</h1>
+
+<table class="table table-striped" id="projectTable">
+    <thead>
+        <tr>
+            <th>
+                Issue title
+            </th>
+            <th>
+                Description
+            </th>
+            <th style="width:10%">
+                Priority
+            </th>
+            <th style="width:10%">
+                AssigneeID
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var issue in Model.projectview.issues)
+        {
+            <tr>
+                <td>
+                    <small>
+                        @issue.issueTitle
+                    </small>
+
+                <td>
+                    <small>
+                        @issue.issueDescription
+                    </small>
+                </td>
+                <td>
+                    <small>
+                            @issue.priority
+                    </small>
+                </td>
+                <td>
+                    <small>
+                            @issue.assigneeID
+                    </small>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="card">
+    <div id="viewAll" class="card-body table-responsive">
+        <form asp-controller="issues" method="post" asp-action="addissue" asp-route-projectID="@Model.projectview.projectID" class="d-inline">
+            <div>
+                <label>Issue </label>
+                <input asp-for="@Model.issue.issueTitle" />
+            </div>
+            <div>
+                <label>Issue Description</label>
+                <input asp-for="@Model.issue.issueDescription" />
+            </div>
+            <div>
+                <label>Assigned to</label>
+                @Html.DropDownListFor(model => model.issue.assigneeID, Model.users, "Select User", new { @class = "form-control" })
+            </div>
+            <div>
+                <label>Priority to</label>
+                @Html.DropDownListFor(model => model.issue.priority, Model.Priority, "priority", new { @class = "form-control" })
+            </div>
+            <div>
+                <label>type</label>
+                @Html.DropDownListFor(model => model.issue.type, Model.type, "type", new { @class = "form-control" })
+            </div>
+
+            <div class="col-sm-12" style=" padding: 20px 20px 0px 0px">
+                <button type="submit" id="save" class="btn bg-primary">
+                    <i class="fa fa-check"></i>
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

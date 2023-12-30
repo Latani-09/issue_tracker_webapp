@@ -4,6 +4,7 @@ using Issue_tracker_webapp.Entities;
 using Issue_tracker_webapp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
@@ -17,6 +18,7 @@ namespace Issue_tracker_webapp.Controllers
             _dataContext = dataContext;
 
         }
+        [HttpGet]
         public async Task<ActionResult> Index()
         {
 
@@ -26,9 +28,10 @@ namespace Issue_tracker_webapp.Controllers
 
             foreach (var project in projects)
             {
+                Console.WriteLine(project.projectID.ToString());
                 var projectviewmodel = new projectDTO
                 {
-                    projectID = project.projectID,
+                    projectID = project.projectID.ToString(),
                     projectName = project.projectName,
                     projectDescription = project.projectDescription
                 };
@@ -56,14 +59,19 @@ namespace Issue_tracker_webapp.Controllers
             await _dataContext.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-        [HttpPost ("{projectID}")]
-        public async Task<IActionResult> viewProject(Guid  projectID, ErrorViewModel errorViewModel)
+       
+        public async Task<IActionResult> viewProject(string projectID)
         {
-            Console.Write(projectID);
-            var project =await _dataContext.projects.SingleOrDefaultAsync(p=>p.projectID==projectID);
+            var viewModel = new ProjectViewModel();
+            var userList = await _dataContext.Users.ToListAsync();
+            var userSelectList = new SelectList(userList, nameof(AppUser.Id), nameof(AppUser.UserName));
+            viewModel.users= userSelectList;
+            Console.Write( "project",projectID);
+            var project =await _dataContext.projects.Include(x=>x.issues).SingleOrDefaultAsync(p=>(p.projectID).ToString()==projectID);
             if (project != null)
             {
-                return View(project);
+                viewModel.projectview = project;
+                return View(viewModel);
             }
             return BadRequest();
         }

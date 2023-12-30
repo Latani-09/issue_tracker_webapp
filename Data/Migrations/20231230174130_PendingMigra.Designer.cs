@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Issue_tracker_webapp.data
+namespace Issue_tracker_webapp.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231218121142_appuser")]
-    partial class appuser
+    [Migration("20231230174130_PendingMigra")]
+    partial class PendingMigra
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,14 +24,73 @@ namespace Issue_tracker_webapp.data
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Issue_tracker_webapp.Entities.AppUser", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("users");
+                });
+
             modelBuilder.Entity("Issue_tracker_webapp.Entities.Issue", b =>
                 {
                     b.Property<Guid>("issueID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("assigneeID")
-                        .HasColumnType("int");
+                    b.Property<string>("assigneeID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime2");
@@ -44,19 +103,15 @@ namespace Issue_tracker_webapp.data
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("priority")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("priority")
+                        .HasColumnType("int");
 
-                    b.Property<string>("projectID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("projectID1")
+                    b.Property<Guid>("projectID1")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("reporterID")
-                        .HasColumnType("int");
+                    b.Property<string>("reporterID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("status")
                         .IsRequired()
@@ -304,9 +359,13 @@ namespace Issue_tracker_webapp.data
 
             modelBuilder.Entity("Issue_tracker_webapp.Entities.Issue", b =>
                 {
-                    b.HasOne("Issue_tracker_webapp.Entities.Project", null)
+                    b.HasOne("Issue_tracker_webapp.Entities.Project", "Project")
                         .WithMany("issues")
-                        .HasForeignKey("projectID1");
+                        .HasForeignKey("projectID1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -321,7 +380,7 @@ namespace Issue_tracker_webapp.data
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
                 {
                     b.HasOne("Issue_tracker_webapp.Entities.Project", null)
-                        .WithMany("users")
+                        .WithMany("Users")
                         .HasForeignKey("projectID");
                 });
 
@@ -369,9 +428,9 @@ namespace Issue_tracker_webapp.data
 
             modelBuilder.Entity("Issue_tracker_webapp.Entities.Project", b =>
                 {
-                    b.Navigation("issues");
+                    b.Navigation("Users");
 
-                    b.Navigation("users");
+                    b.Navigation("issues");
                 });
 #pragma warning restore 612, 618
         }

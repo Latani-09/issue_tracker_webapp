@@ -13,13 +13,13 @@ namespace Issue_tracker_webapp.Services
     {
         private readonly SymmetricSecurityKey _key;
         //constructor
-        private readonly UserManager<AppUser> _userManager;
-        public TokenService(IConfiguration config, UserManager<AppUser> userManager)
+        private readonly UserManager<IdentityUser> _userManager;
+        public TokenService(IConfiguration config, UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"]));
                 }
-        public async Task<string> createToken(AppUser user)
+        public async Task<string> createToken(IdentityUser user)
         {
             var claims = new List<Claim>
             {
@@ -29,7 +29,7 @@ namespace Issue_tracker_webapp.Services
 
             var roles = await _userManager.GetRolesAsync(user);
 
-            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 

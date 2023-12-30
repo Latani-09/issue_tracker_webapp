@@ -1,8 +1,10 @@
 ﻿using Issue_tracker_webapp.Data;
 using Issue_tracker_webapp.DTOs;
 using Issue_tracker_webapp.Entities;
+using Issue_tracker_webapp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Issue_tracker_webapp.Controllers
 {
@@ -10,8 +12,11 @@ namespace Issue_tracker_webapp.Controllers
 
     {
         private readonly ApplicationDbContext _dataContext;
-        public IssuesController(ApplicationDbContext dataContext)
-        {
+        private readonly UserManager<IdentityUser> _userManager;
+        public IssuesController(ApplicationDbContext dataContext, UserManager<IdentityUser> userManager)
+    {
+        _userManager = userManager;
+        
             _dataContext = dataContext;
 
         }
@@ -21,32 +26,39 @@ namespace Issue_tracker_webapp.Controllers
         }
 
         [HttpPost]
-        public void AddIssue(string projectid, [FromBody] issueDTO issue)
+        public async Task<IActionResult> AddIssue(  Guid projectID, ProjectViewModel viewmodel)
         {
-            var project = _dataContext.projects.SingleOrDefault(
-                   p => p.projectID.ToString() == projectid);
+          
+            var project = await _dataContext.projects.SingleOrDefaultAsync(p => p.projectID == projectID);
             if (project == null) { Console.WriteLine("project not found"); }
             else
             {
-                Console.WriteLine("projwct added to cart----------------------------------------------------------------");
+                Console.WriteLine("issue to project ----------------------------------------------------------------");
                 Console.WriteLine(project.projectName);
             }
 
             //Console.WriteLine("shopping cart id------------------------------------------------------");
 
-
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
             // Create a new cart item if no cart item exists.                 
             var issue_toCreate = new Issue
             {
                 issueID = Guid.NewGuid(),
-                projectID = projectid,
+                projectID1 = projectID,
+                reporterID = currentUser.Id,
                 createdAt = DateTime.Now,
-                issueTitle = issue.issueTitle,
-                issueDescription = issue.issueDescription,
+                issueTitle = viewmodel.issue.issueTitle,
+                assigneeID = viewmodel.issue.assigneeID,
+                issueDescription =  viewmodel.issue.issueDescription,
+                status="not ",
+                priority=viewmodel.issue.priority,
+                type=viewmodel.issue.type,
 
             };
-            _dataContext.issues.AddAsync(issue_toCreate);
-            _dataContext.SaveChangesAsync();
+            Console.WriteLine(issue_toCreate);
+            await _dataContext.issues.AddAsync(issue_toCreate);
+            await _dataContext.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
     }
 }
