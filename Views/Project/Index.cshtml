@@ -1,50 +1,55 @@
 ﻿  @using Issue_tracker_webapp.Models;
+@using Microsoft.AspNetCore.Authorization;
+@inject IAuthorizationService AuthorizationService
   @model ProjectViewModel
-<br />
-issue_tracker_webapp.entities;
 
-<h1>Project List</h1>
 <br />
-<table class="table table-striped" id="projectTable">
-    <thead>
-        <tr>
-            <th>
-                Project title
-            </th>
-            <th>
-                Description
-            </th>
-            <th style="width:10%">
-                Actions
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var project in Model.projectList)
-        {
+<h1>Project List @Model.userdID   </h1>
+<br />
+@if (AuthorizationService.AuthorizeAsync(User, Permissions.Project.View).Result.Succeeded)
+{
+{
+    <table class="table table-striped" id="projectTable">
+        <thead>
             <tr>
-                <td>
-                            <small>
-                                @project.projectName
-                            </small>
-                            </td>
-                            <td>
-                            <a>
-                                @project.projectDescription
-                            </a>
-                </td>
-
-                <td>
-                            <a class="nav-link text-dark" asp-controller="project" asp-action="viewProject" asp-route-projectID="@project.projectID" >Go to project</a>
-                </td>
-
+                <th>
+                    Project title
+                </th>
+                <th>
+                    Description
+                </th>
+                <th style="width:10%">
+                    Actions
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
-<br />
+        </thead>
+        <tbody>
+            @foreach (var project in Model.projectList)
+            {
+                <tr>
+                    <td>
+                        <small>
+                            @project.projectName
+                        </small>
+                    </td>
+                    <td>
+                        <a>
+                            @project.projectDescription
+                        </a>
+                    </td>
 
-<div class="card">
+                    <td>
+                        <a asp-controller="project" asp-action="viewProject" asp-route-projectID="@project.projectID" >Go to project</a>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}}
+<br />
+@if(AuthorizationService.AuthorizeAsync(User, Permissions.Project.Create).Result.Succeeded){
+{<div class="card">
     <div id="viewAll" class="card-body table-responsive">
         <form asp-controller="project" method="post" asp-action="addproject" class="d-inline">
             <div>
@@ -65,3 +70,4 @@ issue_tracker_webapp.entities;
     </div>
 </div>
 
+}}

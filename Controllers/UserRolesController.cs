@@ -41,6 +41,7 @@ namespace Issue_tracker_webapp.Controllers
                 var model = new ManageUserRolesViewModel()
                 {
                     UserId = userId,
+                    userName = user.UserName,
                     UserRoles = viewModel
                 };
                 return View(model);

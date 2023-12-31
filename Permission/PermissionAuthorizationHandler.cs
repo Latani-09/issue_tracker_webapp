@@ -9,13 +9,18 @@ namespace Issue_tracker_webapp.Permission
         {
             if (context.User == null)
             {
+                Console.WriteLine("no user found -----------");
                 return;
             }
-            var permissionss = context.User.Claims.Where(x => x.Type == "Permission" &&
+
+            Console.WriteLine(" user found -----------",context.User.ToString());
+            var permissions = context.User.Claims.Where(x => x.Type == "Permission" &&
                                                                 x.Value == requirement.Permission &&
                                                                 x.Issuer == "LOCAL AUTHORITY");
-            if (permissionss.Any())
+
+            if (permissions.Any())
             {
+                Console.WriteLine("permissions----------", requirement.ToString());
                 context.Succeed(requirement);
                 return;
             }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Issue_tracker_webapp.Models;
 using Issue_tracker_webapp.Seeds;
 using Issue_tracker_webapp.Models;
+using Issue_tracker_webapp.ClaimsHelper;
 
 namespace Issue_tracker_webapp.Controllers
 {
@@ -20,8 +21,10 @@ namespace Issue_tracker_webapp.Controllers
         {
             var model = new PermissionViewModel();
             var allPermissions = new List<RoleClaimsViewModel>();
-            //allPermissions.GetPermissions(typeof(Permissions.Products), roleId);
+            allPermissions.GetPermissions(typeof(Permissions.Project), roleId);
+            allPermissions.GetPermissions(typeof(Permissions.Issue), roleId);
             var role = await _roleManager.FindByIdAsync(roleId);
+            model.Role = role.ToString();
             model.RoleId = roleId;
             var claims = await _roleManager.GetClaimsAsync(role);
             var allClaimValues = allPermissions.Select(a => a.Value).ToList();
@@ -35,7 +38,7 @@ namespace Issue_tracker_webapp.Controllers
                 }
             }
             model.RoleClaims = allPermissions;
-            return model;
+            return View(model);
         }
         public async Task<IActionResult> Update(PermissionViewModel model)
         {
@@ -48,7 +51,7 @@ namespace Issue_tracker_webapp.Controllers
             var selectedClaims = model.RoleClaims.Where(a => a.Selected).ToList();
             foreach (var claim in selectedClaims)
             {
-                await _roleManager.AddPermissionClaim(role, claim.Value);
+                await _roleManager.AddPermissionClaims(role, claim.Value);
             }
             return RedirectToAction("Index", new { roleId = model.RoleId });
         }

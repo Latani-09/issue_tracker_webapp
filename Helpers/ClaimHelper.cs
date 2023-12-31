@@ -16,7 +16,7 @@ namespace Issue_tracker_webapp.ClaimsHelper
                 allPermissions.Add(new RoleClaimsViewModel { Value = fi.GetValue(null).ToString(), Type = "Permissions" });
             }
         }
-        public static async Task AddPermissionClaim(this RoleManager<IdentityRole> roleManager, IdentityRole role, string permission)
+        public static async Task AddPermissionClaims(this RoleManager<IdentityRole> roleManager, IdentityRole role, string permission)
         {
             var allClaims = await roleManager.GetClaimsAsync(role);
             if (!allClaims.Any(a => a.Type == "Permission" && a.Value == permission))

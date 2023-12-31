@@ -1,56 +1,60 @@
 ﻿@using Issue_tracker_webapp.Models;
+@using Microsoft.AspNetCore.Authorization;
 @model ProjectViewModel
-
+@inject IAuthorizationService AuthorizationService
 
 <h1>@Model.projectview.projectName</h1>
-
-<table class="table table-striped" id="projectTable">
-    <thead>
-        <tr>
-            <th>
-                Issue title
-            </th>
-            <th>
-                Description
-            </th>
-            <th style="width:10%">
-                Priority
-            </th>
-            <th style="width:10%">
-                AssigneeID
-            </th>
-
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var issue in Model.projectview.issues)
-        {
+@if ((AuthorizationService.AuthorizeAsync(User, Permissions.Issue.View)).Result.Succeeded)
+{
+    <table class="table table-striped" id="projectTable">
+        <thead>
             <tr>
-                <td>
-                    <small>
-                        @issue.issueTitle
-                    </small>
+                <th>
+                    Issue title
+                </th>
+                <th>
+                    Description
+                </th>
+                <th style="width:10%">
+                    Priority
+                </th>
+                <th style="width:10%">
+                    AssigneeID
+                </th>
 
-                <td>
-                    <small>
-                        @issue.issueDescription
-                    </small>
-                </td>
-                <td>
-                    <small>
-                            @issue.priority
-                    </small>
-                </td>
-                <td>
-                    <small>
-                            @issue.assigneeID
-                    </small>
-                </td>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var issue in Model.projectview.issues)
+            {
+                <tr>
+                    <td>
+                        <small>
+                            @issue.issueTitle
+                        </small>
 
+                        <td>
+                            <small>
+                                @issue.issueDescription
+                            </small>
+                        </td>
+                        <td>
+                            <small>
+                                @issue.priority
+                            </small>
+                        </td>
+                        <td>
+                            <small>
+                                @issue.assigneeID
+                            </small>
+                        </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if ((AuthorizationService.AuthorizeAsync(User, Permissions.Issue.Create)).Result.Succeeded){
 <div class="card">
     <div id="viewAll" class="card-body table-responsive">
         <form asp-controller="issues" method="post" asp-action="addissue" asp-route-projectID="@Model.projectview.projectID" class="d-inline">
@@ -84,3 +88,4 @@
         </form>
     </div>
 </div>
+}

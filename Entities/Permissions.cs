@@ -12,12 +12,21 @@
             $"Permissions.{module}.Delete",
         };
         }
-        public static class Products
+        public static class Project
         {
-            public const string View = "Permissions.Products.View";
-        public const string Assign = "Permissions.Products.Assign";
-        public const string Create = "Permissions.Products.Create";
-            public const string Edit = "Permissions.Products.Edit";
-            public const string Delete = "Permissions.Products.Delete";
+            public const string View = "Permissions.Projects.View";
+        public const string Assign = "Permissions.Projects.Assign";
+        public const string Create = "Permissions.Projects.Create";
+            public const string Edit = "Permissions.Projects.Edit";
+            public const string Delete = "Permissions.Projects.Delete";
         }
+
+    public static class Issue
+    {
+        public const string View = "Permissions.Issues.View";
+        public const string Assign = "Permissions.Issues.Assign";
+        public const string Create = "Permissions.Issues.Create";
+        public const string Edit = "Permissions.Issues.Edit";
+        public const string Delete = "Permissions.Issues.Delete";
     }
+}
